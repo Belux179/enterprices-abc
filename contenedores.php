@@ -1,5 +1,17 @@
 <?php include('template/cabecera.php'); ?>
-<?php include('config/bd.php'); ?>
+<?php include('config/bd.php'); 
+
+$sentenciaSQL=$conexion->prepare("SELECT * FROM contenedor ");
+$sentenciaSQL->execute();
+$lisContenedor=$sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
+$sentenciaSQL=$conexion->prepare("SELECT * FROM destino ");
+$sentenciaSQL->execute();
+$listDestino=$sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
+$sentenciaSQL=$conexion->prepare("SELECT * FROM compra ");
+$sentenciaSQL->execute();
+$listCompra=$sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
+
+?>
 <div class="col-md-12">
     
     <div class="card">

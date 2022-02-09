@@ -28,7 +28,7 @@ if($_POST){
             $sentenciaSQL->execute();  
         
         }
-    }catch(Exception $e){echo e.getMessage();}
+    }catch(exception $e){}
     
 }
 ?>
