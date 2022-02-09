@@ -19,21 +19,22 @@ switch ($accion){
         $sentenciaSQL->execute();
         break;
     case "Prod":
-        $sentenciaSQL=$conexion->prepare("INSERT INTO proveedor (nameProveedor, numProveedor, adressProveedor) VALUES (:nombre, :numero, :direccion)");
-        $sentenciaSQL->bindParam(":nombre",$add_proveedor);
-        $sentenciaSQL->bindParam(":numero",$telefono);
-        $sentenciaSQL->bindParam(":direccion",$direccion);
-        echo "Presionado Producto";
+        $sentenciaSQL=$conexion->prepare("INSERT INTO producto (nameProducto, idProveedor, precio, img) VALUES (:nombre, :proveedor, :precio, :img)");
+        $sentenciaSQL->bindParam(":nombre", $add_producto);
+        $sentenciaSQL->bindParam(":proveedor",$proveedor);
+        $sentenciaSQL->bindParam(":precio",$precio);
+        $sentenciaSQL->bindParam(":img",$image);
+        try{ $sentenciaSQL->execute();
+        }catch(PDOException $e){ echo $e->getMessage(); }
         break;
+
 }
 $sentenciaSQL=$conexion->prepare("SELECT * FROM proveedor WHERE `status` = '1'");
 $sentenciaSQL->execute();
 $listProveedores=$sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
-
 $sentenciaSQL=$conexion->prepare("SELECT * FROM producto WHERE `status` = '1'");
 $sentenciaSQL->execute();
 $listProductos=$sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
-
 ?>
 <div class="col-md-5">
     <div class="card">
@@ -139,6 +140,7 @@ $listProductos=$sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
             <table class="table  table-bordered">
             <thead>
                 <tr>
+                    <th>ID</th>
                     <th>Producto</th>
                     <th>Proveedor</th>
                     <th>Precio</th>
@@ -147,13 +149,18 @@ $listProductos=$sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
                 </tr>
             </thead>
             <tbody>
+                <?php foreach($listProductos as $prod){?>
                 <tr>
-                    <td>maiz</td>
-                    <td>pricelorad</td>
-                    <td>14.54</td>
-                    <td>imagen.jpe</td>
+                    <td><?php echo $prod['idProducto']?></td>
+                    <td><?php echo $prod['nameProducto']?></td>
+                    <td><?php foreach($listProveedores as $prov){
+                        if($prov['idProveedor'] == $prod['idProveedor']){
+                            echo $prov['nameProveedor'];}} ?> </td>
+                    <td><?php echo $prod['precio']?></td>
+                    <td><?php echo $prod['img']?></td>
                     <td>Borrar</td>
                 </tr>
+                <?php } ?>
             </tbody>
             </table>
         </div>

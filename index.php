@@ -1,6 +1,19 @@
 <?php 
+include('config/bd.php'); 
 if($_POST){
-    header('Location:productos.php');
+    $user=(isset($_POST["user"]))?$_POST["user"]:"";
+    $password=(isset($_POST["password"]))?$_POST["password"]:"";
+    $sentenciaSQL=$conexion->prepare("SELECT * FROM user ");
+    $sentenciaSQL->execute();
+    $listUser=$sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
+    foreach($listUser as $userr){
+        if(($user==$userr['user'])&&(password_verify($password, $userr['pass']))){
+            session_start();
+            $_SESSION['user'] = $user;
+            header('Location:productos.php');
+        }
+    }
+    
 }
 ?>
 
@@ -14,7 +27,8 @@ if($_POST){
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  </head>
+    <style>body{background-color:#b3d1ff;}</style>
+</head>
   <body> 
     <?php ?>     
     <div class="container ">
@@ -29,8 +43,8 @@ if($_POST){
                 <div class="card-body">
                 <form  method="post" action>
                     <div class = "form-group">
-                        <label for="user">Usurario:</label>
-                        <input type="email" class="form-control" name="user"  placeholder="Ingresar correo">
+                        <label for="user">Usuario:</label>
+                        <input type="text" class="form-control" name="user"  placeholder="Ingresar usuario">
                     </div>   
                     <div class="form-group">
                         <label for="password">Contrase&#241;a:</label>
