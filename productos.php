@@ -29,7 +29,6 @@ switch ($accion){
         break;
 
 }
-$_POST
 $sentenciaSQL=$conexion->prepare("SELECT * FROM proveedor WHERE `status` = '1'");
 $sentenciaSQL->execute();
 $listProveedores=$sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
