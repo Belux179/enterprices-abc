@@ -10,6 +10,7 @@ $proveedor=(isset($_POST["pproveedor"]))?$_POST["pproveedor"]:"";
 $add_producto=(isset($_POST["add_producto"]))?$_POST["add_producto"]:"";
 $precio=(isset($_POST["precio"]))?$_POST["precio"]:"";
 $image=(isset($_FILES["img_producto"]["name"]))?$_FILES["img_producto"]["name"]:"";
+if($_POST){
 switch ($accion){
     case "Prov":
         $sentenciaSQL=$conexion->prepare("INSERT INTO proveedor (nameProveedor, numProveedor, adressProveedor) VALUES (:nombre, :numero, :direccion)");
@@ -17,6 +18,7 @@ switch ($accion){
         $sentenciaSQL->bindParam(":numero",$telefono);
         $sentenciaSQL->bindParam(":direccion",$direccion);
         $sentenciaSQL->execute();
+        header('Location: productos.php');
         break;
     case "Prod":
         $sentenciaSQL=$conexion->prepare("INSERT INTO producto (nameProducto, idProveedor, precio, img) VALUES (:nombre, :proveedor, :precio, :img)");
@@ -26,9 +28,11 @@ switch ($accion){
         $sentenciaSQL->bindParam(":img",$image);
         try{ $sentenciaSQL->execute();
         }catch(PDOException $e){ echo $e->getMessage(); }
+        header('Location: productos.php');
         break;
 
-}
+}}
+
 $sentenciaSQL=$conexion->prepare("SELECT * FROM proveedor WHERE `status` = '1'");
 $sentenciaSQL->execute();
 $listProveedores=$sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
@@ -114,7 +118,7 @@ $listProductos=$sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
                     <th>Nombre</th>
                     <th>Numero</th>
                     <th>Direccion</th>
-                    <th>Acciones</th>
+                    <!--<th>Acciones</th>-->
                 </tr>
             </thead>
             <tbody>
@@ -124,7 +128,7 @@ $listProductos=$sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
                     <td><?php echo $prov['nameProveedor']?></td>
                     <td><?php echo $prov['numProveedor']?></td>
                     <td><?php echo $prov['adressProveedor']?></td>
-                    <td>Borrar</td>
+                    <!--<td>Borrar</td>-->
                 </tr>
                 <?php } ?>
             </tbody>
